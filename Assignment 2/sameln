@@ -1,0 +1,47 @@
+#!/bin/bash
+
+i=0
+
+files=`find $1 -maxdepth 1 -type f -perm -u+r| sort`
+nonread=`find $1 -maxdepth 1 -type f ! -perm -u+r`
+
+if [ "${#nonread}" -ne "0" ]
+then
+    echo 'have no permission to read:'
+    echo "${nonread}"
+fi
+
+while read -r line
+do
+    string=${line}
+    file_array[ $i ]=$string
+    ((i++))
+done <<<"$files"
+
+out=0
+while [ "$out" -lt "${#file_array[@]}" ]
+do
+    repeat=()
+    in1=$(($out+1))
+    while [ "$in1" -lt "${#file_array[@]}" ]
+    do
+	comp_result=`cmp -- "${file_array[$out]}" "${file_array[$in1]}"`
+	if [ "${#comp_result}" -eq "0" ]
+	then
+	    repeat=("${repeat[@]}" "${file_array[$in1]}")
+	    un=in1
+	    unset file_array[$un]
+	    file_array=( "${file_array[@]}" )
+	    ((in1--))
+	fi
+	((in1++))
+    done
+
+    while [ "0" -lt "${#repeat[@]}" ]
+    do
+	`rm "${repeat[0]}"`
+	`ln -- "${file_array[$out]}" "${repeat[0]}"`
+	repeat=("${repeat[@]:1}")
+    done	
+    ((out++))
+done

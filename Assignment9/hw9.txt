@@ -1,0 +1,59 @@
+2.
+Checkout the version 3.0
+git checkout -b 'quote' 'v3.0'
+
+3.
+install the change
+patch -p1 < quote-3.0-patch.txt
+patching file src/cmp.c
+patching file src/diff.c
+patching file src/diff3.c
+patching file src/dir.c
+patching file src/sdiff.c
+patching file src/util.c
+
+4&5.
+since the spec is not clear about what it means by adopt, I just copy the ChangLog-2008 and name it ChangLog
+cp ChangeLog-2008 ChangeLog
+
+then Change it according to what I did(I used the same format as professor eggert's 2007-07-19 log
+emacs ChangeLog
+C-x 4 a
+
+6.
+Commint changes
+git commit -aF ChangeLog
+
+7.
+get the patch
+git format-patch -1 --stdout > formatted-patch.txt
+
+8.
+create a new branch called partner
+git checkout -b 'partner' 'v3.0'
+
+after get partner's patch, I apply it
+git am formatted-patch.txt
+
+then do the same as lab
+./boostrap
+patch -p0 < additional_patch.txt
+./configure 
+make 
+make check
+
+check the patch
+./src/diff . - 
+./src/diff --help
+everything work fine
+
+9.
+check change log work
+make distdir
+emacs diffutils*/ChangeLog
+it work out great
+
+10.
+I make sure that the X11 is enabled and the cd to the place to get the picture
+cd ~eggert/src/gnu/emacs
+gitk 

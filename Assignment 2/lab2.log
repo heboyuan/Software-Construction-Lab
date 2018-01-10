@@ -1,0 +1,121 @@
+Setup 
+1.use export LC_ALL='C' to change the LC_CTYPE="C"
+
+2.use sort /usr/share/dict/words > words to create and put the sorted words
+into the file words
+
+3.use wget http://web.cs.ucla.edu/classes/fall17/cs35L/assign/assign2.html to
+download the assignment page, and use mv assign2.html assign2.txt to change it
+to a text file.
+
+4.tr -c 'A-Za-z' '[\n*]' < assign2.txt the output is characters with a few
+empty lines between them this command keep ever character that is A-Z or a-z,
+and change the other characters to new line.
+
+5.tr -cs 'A-Za-z' '[\n*]' <assign2.txt the output is essentially same as above
+except there is only a newline and the very begining of the output the -s change
+"squeezes" everything in the output
+
+6.tr -cs 'A-Za-z' '[\n*]' <assign2.txt | sort the output is the words that are
+sorted according to alphabetical order the output of tr -cs 'A-Za-z' '[\n*]'
+<assign2.txt is the
+
+7.tr -cs 'A-Za-z' '[\n*]' <assign2.txt | sort -u the output is still the words
+that are sorted but there is no repeated words
+
+8.tr -cs 'A-Za-z' '[\n*]' <assign2.txt | sort -u | comm - words the output is
+three column column 1 is the lines unique to the sorted assign2.txt (the result
+of step 7) column 2 is the lines uniques to words column 3 is the lines that
+appear in both sorted output and words
+
+9.tr -cs 'A-Za-z' '[\n*]' <assign2.txt | sort -u | comm -23 - words output the
+lines unique to the sorted assign2.txt (the result of step 7)
+
+Lab
+1.I get the "English to Hawaiian" webpage by wget
+http://mauimapp.com/moolelo/hwnwdseng.htm
+
+2 grep '<td>.*</td>' select all the <td>...</td> from a input sed
+"/<td><[/]td>/d" remove the line with empty <td></td> sed 's/<[/]*td>//g remove
+the tag <td></td> from a input sed '1~2d' remove every other line, which is the
+english words
+
+tr '[A-Z]' '[a-z]' 
+convert all uppercase to lowercase in the input
+
+sed "s/<[/]*u>//g" 
+remove the tag <u></u> from a input
+
+sed "s/\`/\'/g" 
+change ` to ' in the input
+
+sed "s/,/\n/g"
+sed "s/\s/\n/g" 
+treat characters seperated by , and by space as
+different words
+
+sed "/[^pk'mnwlhaeiou]/d"
+remove the words that are not Hawaiian
+
+sort -u
+put into sorted order
+
+the final script shown below
+script________________________________________________________________
+#!/bin/bash
+
+grep '<td>.*</td>'|
+sed "/<td><[/]td>/d"|
+sed "s/<[/]*td>//g"|
+sed '1~2d'|
+
+tr '[A-Z]' '[a-z]'|
+
+sed "s/<[/]*u>//g"|
+
+sed "s/\`/\'/g"|
+
+sed "s/,/\n/g" |
+sed "s/\s/\n/g" |
+
+sed "/[^pk'mnwlhaeiou]/d"|
+
+sort -u
+________________________________________________________________________________
+
+then I add the execution permission to the file
+chmod +x buildwords
+
+3.
+./buildwords < hwnwdseng.htm > hwords use the script I wrote to setup the
+hwords dictionary according to the website
+
+wget http://web.cs.ucla.edu/classes/fall17/cs35L/assign/assign2.html
+download assignment2
+webpage tr '[A-Z]' '[a-z]' < assign2.html> assign2_lower.html
+change the uppercase in assigment2 page to lowercase and save to file
+named assign2_lower.html.
+
+tr -cs 'A-Za-z' '[\n*]'<assign2_lower.html | sort -u | comm -23 - 
+words this will give all the "misspelled" Englsih words
+tr -cs 'A-Za-z' '[\n*]'<assign2_lower.html | sort -u | comm -23 - words | wc
+this outputs 39 38247. the second number is the word count, which is the
+number of "misspelled" words. there are 38 misspelled Englsih words
+
+tr -cs 'A-Za-z' '[\n*]'<assign2_lower.html | sort -u | comm -23 - hwords
+this will give all the "misspelled" Hawaiian words
+tr -cs 'A-Za-z' '[\n*]'<assign2_lower.html | sort -u | comm -23 - hwords | wc
+this outputs 405 405 2601. the second number is the word count,
+which is the number of "misspelled" words.
+there are 405 misspelled Hawaiian words
+
+tr -cs 'A-Za-z' '[\n*]'<assign2_lower.html | sort -u | comm -23 - hwords > mish
+tr -cs 'A-Za-z' '[\n*]'<assign2_lower.html | sort -u | comm -23 - words > mise
+I store the "misspelled" Hawaiian words and the "misspelled" English words 
+into mish and mise.
+comm mish mise
+this give me the words that are unique in each file.
+"misspelled" as Hawaiian but not as English is column1, 
+examples are why, whose, you...
+"misspelled" as English but not as Hawaiian is column2, 
+examples are wiki, lau, halau...

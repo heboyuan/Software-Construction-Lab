@@ -1,0 +1,101 @@
+1.
+I write the program tr2b.c and tr2u.c
+compile it
+gcc -o tr2b tr2b.c
+gcc -o tr2u tr2u.c
+
+2.
+then I created a file test.txt with
+head --bytes=5000000 /dev/urandom > text.txt
+
+I find that strace -c will give a very nice table
+strace -c ./tr2b "A" "a" < test.txt > test2.txt
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 38.84    0.000047           5         9           mmap
+ 15.70    0.000019           5         4           mprotect
+ 11.57    0.000014          14         1           write
+ 10.74    0.000013           3         4           fstat
+  9.09    0.000011          11         1           munmap
+  8.26    0.000010           5         2           read
+  3.31    0.000004           4         1           arch_prctl
+  2.48    0.000003           2         2           close
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000121                    29         1 total
+
+strace -c ./tr2u "A" "a" < test.txt >test2.txt
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 55.58   24.460119           5   5000000           write
+ 44.41   19.544669           4   5000002           read
+  0.00    0.000045           6         7           mmap
+  0.00    0.000029           7         4           mprotect
+  0.00    0.000017           9         2           open
+  0.00    0.000011          11         1           munmap
+  0.00    0.000009           5         2           fstat
+  0.00    0.000007           4         2           close
+  0.00    0.000007           7         1         1 access
+  0.00    0.000007           7         1           execve
+  0.00    0.000004           4         1           brk
+  0.00    0.000004           4         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00   44.004928              10000024         1 total
+
+(b)
+strace -c ./tr2b "A" "a" < test.txt
+ time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 25.29    0.000022           6         4           mprotect
+ 17.24    0.000015          15         1           write
+ 16.09    0.000014           7         2           read
+ 14.94    0.000013           3         4           fstat
+ 14.94    0.000013          13         1           munmap
+ 11.49    0.000010           1         9           mmap
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000087                    29         1 total
+
+strace -c ./tr2u "A" "a" < test.txt
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 56.33   27.480755           5   5000000           write
+ 43.67   21.304535           4   5000002           read
+  0.00    0.000049           7         7           mmap
+  0.00    0.000032           8         4           mprotect
+  0.00    0.000016           8         2           open
+  0.00    0.000013          13         1           munmap
+  0.00    0.000009           5         2           close
+  0.00    0.000009           5         2           fstat
+  0.00    0.000008           8         1         1 access
+  0.00    0.000007           7         1           execve
+  0.00    0.000005           5         1           brk
+  0.00    0.000004           4         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00   48.785442              10000024         1 total
+
+obviously the tr2b version have much less system calls
+
+3.
+I test the time
+time ./tr2b "A" "a" < test.txt >test2.txt
+real    0m0.003s
+user    0m0.000s
+sys     0m0.001s
+
+time ./tr2u "A" "a" < test.txt >test2.txt
+real    0m6.082s
+user    0m0.432s
+sys     0m5.606s
+
+according to the above result, the tr2b version uses less time,
+which means using putchar and getchar is faster than using read and write
+this is because putchar and getchar uses less system calls

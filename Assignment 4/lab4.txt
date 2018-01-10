@@ -1,0 +1,193 @@
+1.
+I download the old stable version of coreutils
+wget
+http://web.cs.ucla.edu/classes/fall17/cs35L/assign/coreutils-with-bug.tar.gz
+
+2.
+I extract the files
+tar -xvf coreutils-with-bug.tar.gz
+
+I move into the folder
+cd coreutils-with-bug/
+
+I install the program
+./configure --prefix=/u/eng/class/classboy/Assignment4/Lab/Install
+make
+make install
+
+During make, I get the error message
+       In file included from utimecmp.c:41:0:
+       utimens.h:2:5: error: conflicting types for 'futimens'
+        int futimens (int, char const *, struct timespec const [2]);
+	     ^
+	     In file included from utimecmp.h:25:0,
+	                      from utimecmp.c:25:
+			      /usr/include/sys/stat.h:373:12: note: previous
+       declaration of 'futimens' was here
+        extern int futimens (int __fd, const struct timespec __times[2])
+       __THROW;
+                   ^
+		   make[3]: *** [utimecmp.o] Error 1
+		   make[3]: Leaving directory
+       `/w/home.20/class/classboy/Assignment4/Lab/coreutils-with-bug/lib'
+       make[2]: *** [all] Error 2
+       make[2]: Leaving directory
+       `/w/home.20/class/classboy/Assignment4/Lab/coreutils-with-bug/lib'
+       make[1]: *** [all-recursive] Error 1
+       make[1]: Leaving directory
+       `/w/home.20/class/classboy/Assignment4/Lab/coreutils-with-bug'
+       make: *** [all] Error 2
+
+During make install, I get the error message
+       Making install in lib
+       make[1]: Entering directory
+       `/w/home.20/class/classboy/Assignment4/Lab/coreutils-with-bug/lib'
+       make  install-am
+       make[2]: Entering directory
+       `/w/home.20/class/classboy/Assignment4/Lab/coreutils-with-bug/lib'
+       if gcc -DHAVE_CONFIG_H
+       -DLIBDIR=\"/u/eng/class/classboy/Assignment4/Lab/Install/lib\"
+       -I. -I. -I..  -I.. -I.   -g -O2 -MT utimecmp.o -MD -MP -MF
+       ".deps/utimecmp.Tpo" -c -o utimecmp.o utimecmp.c; \
+       then mv -f ".deps/utimecmp.Tpo" ".deps/utimecmp.Po"; else rm -f
+       ".deps/utimecmp.Tpo"; exit 1; fi
+       In file included from utimecmp.c:41:0:
+       utimens.h:2:5: error: conflicting types for 'futimens'
+        int futimens (int, char const *, struct timespec const [2]);
+	     ^
+	     In file included from utimecmp.h:25:0,
+	                      from utimecmp.c:25:
+			      /usr/include/sys/stat.h:373:12: note: previous
+       declaration of 'futimens' was here
+        extern int futimens (int __fd, const struct timespec __times[2])
+       __THROW;
+                   ^
+		   make[2]: *** [utimecmp.o] Error 1
+		   make[2]: Leaving directory
+       `/w/home.20/class/classboy/Assignment4/Lab/coreutils-with-bug/lib'
+       make[1]: *** [install] Error 2
+       make[1]: Leaving directory
+       `/w/home.20/class/classboy/Assignment4/Lab/coreutils-with-bug/lib'
+       make: *** [install-recursive] Error 1
+
+
+3.
+I download the patch
+wget http://web.cs.ucla.edu/classes/fall17/cs35L/assign/coreutils.diff
+
+I apply the patch
+patch -p0 <coreutils.diff
+
+I install the program
+make
+make install
+and there is no error
+
+I read the error and the patch, and find out that the problem is there are
+conflicting types for 'futimens'.
+The patch change the conflicted futimens to coreutils_futimens so there won't be
+any problem
+
+4.
+Go back to Lab directory
+cd ..
+
+Reproduce the bug
+tmp=$(mktemp -d)
+cd $tmp
+touch -d '1918-11-11 11:00 GMT' wwi-armistice
+touch now
+sleep 1
+touch now1
+TZ=UTC0 ~/Assignment4/Lab/Install/bin/ls -lt --full-time wwi-armistice now now1
+We see the bug
+-rw-r--r-- 1 classboy class 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+-rw-r--r-- 1 classboy class 0 2017-10-24 22:37:12.878611427 +0000 now1
+-rw-r--r-- 1 classboy class 0 2017-10-24 22:37:00.928287749 +0000 now
+
+5.
+use the gdb run the function with flag
+gdb --args ~/Assignment4/Lab/Install/bin/ls -lt
+
+exam all the functions
+(gdb) info functions
+
+from the functions listed, I notice the one with name compare_mtime.
+the name suggest that the bug might have something to do with it.
+I put a break point there
+(gdb) break compare_mtime
+
+run the program
+(gdb) run
+use list to see what happens
+(gdb) list
+2879    {
+2880      int diff = timespec_cmp (get_stat_mtime (&b->stat),
+2881                               get_stat_mtime (&a->stat));
+2882      return diff ? diff : cmp (a->name, b->name);
+2883    }
+2884    static int compare_mtime (V a, V b) { return cmp_mtime (a, b, xstrcoll);
+}
+2885    static int compstr_mtime (V a, V b) { return cmp_mtime (a, b, strcmp); }
+2886    static int rev_cmp_mtime (V a, V b) { return compare_mtime (b, a); }
+2887    static int rev_str_mtime (V a, V b) { return compstr_mtime (b, a); }
+2888
+
+go into the function timespec_cmp
+(gdb) s
+(gdb) s
+
+check the function
+(gdb) list
+now we see the function that cause error
+46      timespec_cmp (struct timespec a, struct timespec b)
+47      {
+48        int diff = a.tv_sec - b.tv_sec;
+49        return diff ? diff : a.tv_nsec - b.tv_nsec;
+50      }
+
+int diff = a.tv_sec - b.tv_sec could cause integer overflow, 
+that is, when a.tv_sec is very small and b.tv_sec is very large,
+the result will cause integer overflow and wrap around becomes a large number
+
+exit the gdb
+(gdb) quit
+
+6.
+go back to fix the bug
+cd ~/Assignment4/Lab/coreutils-with-bug/lib/
+
+get the buggy file
+cp timespec.h ../../timespec.h
+
+use emacs to modify it
+emacs ../../timespec.h
+instead of using subtraction, I use if else statement to directly compare each
+cases and return accordingly
+
+create the diff file
+diff -u timespec.h ../../timespec.h > ../lab4.diff
+
+add the ChangeLog entry and change the path to the timespec.h so it can work
+properly
+emacs ../lab4.diff
+
+7.
+go to home directory
+cd ~
+
+reproduce the problem
+$ touch -d '1918-11-11 11:00 GMT' wwi-armistice
+$ touch now
+$ touch now1
+$ TZ=UTC0 ls -lt --full-time wwi-armistice now now1
+-rw-r--r-- 1 classboy class 0 2054-12-17 17:28:16.000000000 +0000 wwi-armistice
+-rw-r--r-- 1 classboy class 0 2017-10-24 23:41:05.057491000 +0000 now1
+-rw-r--r-- 1 classboy class 0 2017-10-24 23:41:00.097017000 +0000 now
+
+so it looks like the SEASnet machine have similar problem.
+this is because that SEASnet uses 32 bit NFS system while the local linux file
+system uses 64 bit.
+moreover, all the times are represented as seconds from the Unix Epoch(January
+1970)
+as a result the SEASnet will truncate the first 32 bits, which includes the sign bit.

@@ -1,0 +1,357 @@
+1.
+man -K "keyword"
+
+2.
+cp is located at /usr/bin/cp
+wc is located at /user/bin/wc
+can be found using which command
+
+3.
+.	Read and execute commands from filename in the current shell environment and return the exitstatus of the last command executed from filename.
+w	displays  information  about  the  users currently on the machine, and their processes.
+[	evaluate conditinal expression
+X	seems to be a link to Xorg, which is a full featured X (ls -l /usr/bin/)
+can be found using find /usr/bin/ -name '?' -executable
+
+4.
+/etc/alternatives/emacs
+can be found using readlink /usr/bin/emacs
+
+5.
+g+s	set group id on execution
+o-x	remove others' permission to execute
+can be found by read man chmod
+
+6.
+-ctime -21
+can be found by read man find
+
+7.
+.
+./nsdefault
+./Desktop
+./Desktop/$RECYCLE.BIN
+./Desktop/$RECYCLE.BIN/$RZ7TJUH
+./Documents
+./Documents/$RECYCLE.BIN
+./Downloads
+./Downloads/$RECYCLE.BIN
+./.emacs.d
+./.emacs.d/auto-save-list
+./.cache
+./.cache/abrt
+./.config
+./.config/abrt
+./perl5
+can be found -ctime -21 -type d to find the directories
+
+8.
+/usr/bin/dvired
+/usr/bin/etags
+/usr/bin/psfaddtable
+/usr/bin/pdfjadetex
+/usr/bin/open
+/usr/bin/texhash
+/usr/bin/captoinfo
+/usr/bin/unxz
+/usr/bin/pmiostat
+/usr/bin/bzcat
+/usr/bin/apropos
+/usr/bin/xzegrep
+/usr/bin/lpq
+/usr/bin/etex
+/usr/bin/xjc
+/usr/bin/javaws
+/usr/bin/gsoelim
+/usr/bin/texlinks
+/usr/bin/hwloc-ls
+/usr/bin/rmic
+/usr/bin/lpr
+/usr/bin/pdfxmltex
+/usr/bin/slogin
+/usr/bin/lpstat
+/usr/bin/kdesu
+/usr/bin/kpsewhere
+/usr/bin/systemd-loginctl
+/usr/bin/allneeded
+/usr/bin/gjs
+/usr/bin/keytool
+/usr/bin/thumbpdf
+/usr/bin/jcmd
+/usr/bin/extractbb
+/usr/bin/wish
+/usr/bin/texconfig
+/usr/bin/htmex
+/usr/bin/mailq.postfix
+/usr/bin/pdflatex
+/usr/bin/appletviewer
+/usr/bin/iptables-xml
+/usr/bin/nfs4_editfacl
+/usr/bin/jjs
+/usr/bin/lastb
+/usr/bin/gtroff
+/usr/bin/serialver
+/usr/bin/jar
+/usr/bin/xzcat
+/usr/bin/libpng-config
+/usr/bin/db2pdf
+/usr/bin/gimp-console
+/usr/bin/dvilualatex
+/usr/bin/allcm
+/usr/bin/vimdiff
+/usr/bin/texluac
+/usr/bin/idlj
+/usr/bin/xzcmp
+/usr/bin/httex
+/usr/bin/gmake
+/usr/bin/awk
+/usr/bin/mktexfmt
+/usr/bin/javac
+/usr/bin/sudoedit
+/usr/bin/mailq.sendmail
+/usr/bin/nc
+/usr/bin/dvipdfm
+/usr/bin/atq
+/usr/bin/fmtutil-sys
+/usr/bin/gpgv
+/usr/bin/db2dvi
+/usr/bin/combinediff
+/usr/bin/unix2mac
+/usr/bin/ld
+/usr/bin/pdfetex
+/usr/bin/bashbug
+/usr/bin/orbd
+/usr/bin/hoststat
+/usr/bin/ksh
+/usr/bin/db2ps
+/usr/bin/jconsole
+/usr/bin/sg
+/usr/bin/initex
+/usr/bin/policytool
+/usr/bin/bzless
+/usr/bin/x86_64
+/usr/bin/rksh
+/usr/bin/lprm
+/usr/bin/mailq
+/usr/bin/pmevent
+/usr/bin/simpdftex
+/usr/bin/wsimport
+/usr/bin/extcheck
+/usr/bin/jhat
+/usr/bin/paplay
+/usr/bin/java
+/usr/bin/htxelatex
+/usr/bin/rview
+/usr/bin/rmid
+/usr/bin/rmail
+/usr/bin/mac2unix
+/usr/bin/python2-config
+/usr/bin/cancel
+/usr/bin/jdb
+/usr/bin/bzcmp
+/usr/bin/pax
+/usr/bin/rvim
+/usr/bin/pack200
+/usr/bin/jade
+/usr/bin/gpic
+/usr/bin/traceroute6
+/usr/bin/fmtutil
+/usr/bin/infotocap
+/usr/bin/javah
+/usr/bin/jrunscript
+/usr/bin/desktop-file-edit
+/usr/bin/passwd
+/usr/bin/nmtui-connect
+/usr/bin/readcd
+/usr/bin/reset
+/usr/bin/javadoc
+/usr/bin/psfstriptable
+/usr/bin/inimf
+/usr/bin/ht
+/usr/bin/jadetex
+/usr/bin/python
+/usr/bin/kpsexpand
+/usr/bin/emacs
+/usr/bin/setup
+/usr/bin/updmap
+/usr/bin/newaliases.postfix
+/usr/bin/schemagen
+/usr/bin/ex
+/usr/bin/texconfig-dialog
+/usr/bin/python-config
+/usr/bin/python2
+/usr/bin/bunzip2
+/usr/bin/allec
+/usr/bin/kpsepath
+/usr/bin/nail
+/usr/bin/mkisofs
+/usr/bin/htcontext
+/usr/bin/unpack200
+/usr/bin/dviluatex
+/usr/bin/servertool
+/usr/bin/newaliases.sendmail
+/usr/bin/jstat
+/usr/bin/systemd-coredumpctl
+/usr/bin/pamon
+/usr/bin/rvi
+/usr/bin/jsadebugd
+/usr/bin/rhn_register
+/usr/bin/htxetex
+/usr/bin/view
+/usr/bin/psfgettable
+/usr/bin/dvdrecord
+/usr/bin/xzfgrep
+/usr/bin/nisdomainname
+/usr/bin/mail
+/usr/bin/grepdiff
+/usr/bin/sh
+/usr/bin/newaliases
+/usr/bin/gpg
+/usr/bin/nsgmls
+/usr/bin/ypdomainname
+/usr/bin/spent
+/usr/bin/texlua
+/usr/bin/makemap
+/usr/bin/kpsetool
+/usr/bin/setup-nsssysinit
+/usr/bin/f95
+/usr/bin/dvi2fax
+/usr/bin/phar
+/usr/bin/pmcollectl
+/usr/bin/flipdiff
+/usr/bin/atrm
+/usr/bin/flex++
+/usr/bin/mk4ht
+/usr/bin/lex
+/usr/bin/jstack
+/usr/bin/geqn
+/usr/bin/xmltex
+/usr/bin/rnano
+/usr/bin/latex
+/usr/bin/linux32
+/usr/bin/parec
+/usr/bin/i386
+/usr/bin/mkhybrid
+/usr/bin/sgmlnorm
+/usr/bin/rpmquery
+/usr/bin/htlatex
+/usr/bin/mptopdf
+/usr/bin/chsh
+/usr/bin/rpmverify
+/usr/bin/X
+/usr/bin/sgml2xml
+/usr/bin/ghostscript
+/usr/bin/byacc
+/usr/bin/ping6
+/usr/bin/nmtui-hostname
+/usr/bin/links
+/usr/bin/gtbl
+/usr/bin/lualatex
+/usr/bin/latrace-ctl
+/usr/bin/rmiregistry
+/usr/bin/lsdiff
+/usr/bin/jmap
+/usr/bin/gnroff
+/usr/bin/pstree.x11
+/usr/bin/db2rtf
+/usr/bin/dnsdomainname
+/usr/bin/tclsh
+/usr/bin/texconfig-sys
+/usr/bin/jarsigner
+/usr/bin/mysql_config
+/usr/bin/csh
+/usr/bin/tnameserv
+/usr/bin/spam
+/usr/bin/pmatop
+/usr/bin/updmap-sys
+/usr/bin/gneqn
+/usr/bin/gimp
+/usr/bin/pstack
+/usr/bin/zsoelim
+/usr/bin/jinfo
+/usr/bin/domainname
+/usr/bin/gnome-keyring
+/usr/bin/subscription-manager
+/usr/bin/httexi
+/usr/bin/native2ascii
+/usr/bin/javap
+/usr/bin/gtar
+/usr/bin/nmtui-edit
+/usr/bin/arecord
+/usr/bin/lp
+/usr/bin/jstatd
+/usr/bin/jps
+/usr/bin/ebb
+/usr/bin/mkluatexfontdb
+/usr/bin/cdrecord
+/usr/bin/purgestat
+/usr/bin/Mail
+/usr/bin/wsgen
+/usr/bin/cc
+/usr/bin/parecord
+/usr/bin/linux64
+/usr/bin/apt
+/usr/bin/makeinfo
+can be find using find /usr/bin/ -type l
+
+9.
+libgpg-error.so.0.10.0
+can be found using ls -lt
+
+10.
+local get data from the settings of the environment variables (LC_* environment variables) that control the locale
+can be found by man locale
+
+11.
+Buffer-menu-sort
+sort-columns
+sort-fields
+sort-lines
+sort-numeric-fields
+sort-pages
+sort-paragraphs
+sort-regexp-fields
+tabulated-list-col-sort
+tabulated-list-sort
+can be found by C-h a sort
+
+12.
+C-M-a
+Move backward to the beginning of a defun.
+
+C-M-b
+Move backward across one balanced expression (sexp).
+
+C-M-c
+Exit from the innermost recursive edit or minibuffer.
+
+C-M-d
+Move forward down one level of parentheses.
+
+C-M-e
+Move forward to next end of defun.
+
+C-M-f
+Move forward across one balanced expression (sexp).
+
+C-M-g
+Does not exist
+
+C-M-h
+Put mark at end of this defun, point at beginning.
+The defun marked is the one that contains point or follows point.
+
+13.
+C-g runs the command keyboard-quit. Signal a `quit' condition. During execution of Lisp code, this character causes a quit directly. At top-level, as an editor command, this simply beeps.
+
+14.
+yank function reinsert the last stretch of killed text
+
+15.
+the dired command give the available and total space (total used in directory 350840 available 11623156) while ls gives total number of file system blocks.
+the dired command give the current and parent directories while ls -l doesn't 
+ie.
+  dr-xr-xr-x.   2 root root       81920 Sep 16 13:15 .
+  drwxr-xr-x.  16 root root        4096 Dec  5  2016 ..
+  
+

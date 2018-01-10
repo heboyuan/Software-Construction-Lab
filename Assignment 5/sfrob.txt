@@ -1,0 +1,114 @@
+1.
+I use files of random characters to test the programs.
+I also use gprof to profile the program to know the number of comparison happened
+The result are shown below
+
+1000 words, 8752 comparisons
+time ./sfrob < text >result
+real    0m0.006s
+user    0m0.002s
+sys     0m0.002s
+
+time ./sfrobu < text >result
+real    0m0.009s
+user    0m0.001s
+sys     0m0.006s
+
+10000 words, 120787 comparisons
+time ./sfrob < text >result
+real    0m0.015s
+user    0m0.008s
+sys     0m0.003s
+
+time ./sfrobu < text >result
+real    0m0.057s
+user    0m0.006s
+sys     0m0.049s
+
+100000 words, 1538516 comparisons
+time ./sfrob < text >result
+real    0m0.107s
+user    0m0.098s
+sys     0m0.001s
+
+time ./sfrobu < text >result
+real    0m0.568s
+user    0m0.077s
+sys     0m0.483s
+
+1000000 words, 18691032 comparisons
+time ./sfrob < text >result
+real    0m1.480s
+user    0m1.391s
+sys     0m0.029s
+
+time ./sfrobu < text >result
+real    0m5.671s
+user    0m0.940s
+sys     0m4.669s
+
+then I do a linear regression on the the number of comparisons and the number of input words, I get
+number of comparisons = 18.8*(number of input words)
+the R square is 0.9997 so this is a very good line
+
+2.
+I use a file with 5329037 bytes of random text to test
+
+then I test with the programs
+time ./sfrob < text > result
+real    0m1.195s
+user    0m1.110s
+sys     0m0.037s
+
+time ./sfrobu < text > result
+real    0m6.142s
+user    0m0.836s
+sys     0m5.258s
+
+time ./sfrobs < text > result
+real    0m3.298s
+user    0m3.238s
+sys     0m0.038s
+
+time ./sfrobu -f < text > result
+real    0m6.497s
+user    0m1.512s
+sys     0m4.938s
+
+time ./sfrobs -f < text > result
+real    0m9.705s
+user    0m9.649s
+sys     0m0.046s
+
+
+then I tested on a smaller file, 819852 bytes
+time ./sfrob < text > result
+real    0m0.174s
+user    0m0.160s
+sys     0m0.005s
+
+time ./sfrobu < text > result
+real    0m0.848s
+user    0m0.115s
+sys     0m0.724s
+
+time ./sfrobs < text > result
+real    0m0.493s
+user    0m0.482s
+sys     0m0.008s
+
+time ./sfrobu -f < text > result
+real    0m0.990s
+user    0m0.200s
+sys     0m0.780s
+
+time ./sfrobs -f < text > result
+real    0m1.382s
+user    0m1.368s
+sys     0m0.013s
+
+
+According to the result I get, the sfrob, which is getchar and putchar outrun every other program
+Then the fastest is sfrobs which uses tr and sort, the sfrobu which directly uses system call is the slowest
+the -f flag doesn't have much influence on the sfrobu but greatly slows sfrobs down.
+overall, the direstly use system call is the slowest and use putchar and getchar is the fastest

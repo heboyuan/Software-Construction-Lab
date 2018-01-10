@@ -1,0 +1,129 @@
+1.
+get a copy of the repository
+git clone ~eggert/src/gnu/diffutils
+
+2.
+got to the get repository
+cd diffutils/
+
+get the log
+git log > git-log.txt
+
+3.
+generate the list of tags
+git tag > git-tags.txt
+
+4.
+I go to the git-log.txt
+emacs git-log.txt
+
+I search the "maint: quote 'like this' or "like this", not `like this" use C-s, find out that is
+commit 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f
+Author: Paul Eggert <eggert@cs.ucla.edu>
+Date:   Wed Jan 25 23:46:16 2012 -0800
+
+create the patch file
+git format-patch -1 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f  --stdout > quote-patch.txt
+
+5.
+check out the version 3.0 and name it lab3.0
+git checkout -b 'lab3.0' 'v3.0'
+
+6.
+Patch
+patch -p1 < quote-patch.txt
+
+errors
+patching file src/diff3.c
+Hunk #6 FAILED at 433.
+1 out of 9 hunks FAILED -- saving rejects to file src/diff3.c.rej
+patching file src/diff.c
+Hunk #10 FAILED at 876.
+Hunk #11 FAILED at 906.
+Hunk #12 FAILED at 942.
+3 out of 14 hunks FAILED -- saving rejects to file src/diff.c.rej
+
+
+
+7.
+get the status
+git status
+# On branch lab3.0
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#       modified:   NEWS
+#       ...
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#       NEWS.orig
+#       ...
+no changes added to commit (use "git add" and/or "git commit -a")
+
+8&9.
+I emacs into the files that are not .c file and use C-x v u to revert the changes
+I emacs into the .c files. use C-x v = to find the differences and change them by hand
+
+10.
+I emacs into the src/diff3.c and src/diff.c. searched and changed them by hand
+
+11.
+remove the untracked files
+git clean -f
+
+12.
+check the work
+git status
+# On branch lab3.0
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#       modified:   src/cmp.c
+#       ...
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+
+put the patch
+git diff > quote-3.0-patch.txt
+
+13.
+I follow the steps in README-hacking to build
+./bootstrap
+
+I copy the patch and put it into addtional_patch.txt. Then patch it
+patch -p0 < addtional_patch.txt
+
+I keep follow the README-hacking
+./configure
+make
+make check
+
+check that everything works
+diff . -
+diff --help
+everything works, now I see ' instead of `
+
+14.
+I go back to and made directories
+cd ..
+mkdir diffutils-3.0
+mkdir diffutils-3.0-patch
+
+I get the original code
+git clone ~eggert/src/gnu/diffutils original
+cd original/
+git checkout 'v3.0' -b 'orig3.0'
+
+I copy the code to right places
+cp ./src/*.c ../diffutils-3.0/
+
+I go back and copy the patched code
+cd ..
+cp ./diffutils/src/*.c ./diffutils-3.0-patch/
+
+I do the check
+./diffutils/src/diff -pru diffutils-3.0 diffutils-3.0-patch >quote-3.0-test.txt

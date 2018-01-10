@@ -1,0 +1,46 @@
+1.
+I check that the sort is up to date
+sort --version
+sort (GNU coreutils) 8.22
+Copyright (C) 2013 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Mike Haertel and Paul Eggert.
+
+2.
+I create the test file with 10,000,000 random single-precision numbers and put them into test with proper form. 
+od -tf -N 40000000 < /dev/urandom | sed 's/^[0-9]* *//' | tr -s ' ' '\n' > test
+
+I test the command the sort
+
+default
+time -p sort -g < test > /dev/null
+real 17.48
+user 95.67
+sys 0.27
+
+1 thread
+time -p sort -g --parallel=1 < test > /dev/null
+real 88.27
+user 88.15
+sys 0.11
+
+2 thread parallel
+time -p sort -g --parallel=2 < test > /dev/null
+real 47.82
+user 91.23
+sys 0.17
+
+4 thread parallel
+time -p sort -g --parallel=4 < test > /dev/null
+real 27.62
+user 94.17
+sys 0.21
+
+8 thread parallel
+time -p sort -g --parallel=8 < test > /dev/null
+real 18.67
+user 101.21s
+sys 0.28

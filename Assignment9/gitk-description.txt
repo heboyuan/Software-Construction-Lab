@@ -1,0 +1,14 @@
+upper left window
+this window shows the hierarchical tree of the commits with the most recent on top. It also shows the relationship between the commits and the branches.
+
+upper middle window
+this window shows the name and emails of the authors who made the commits in the upper left window
+
+upper right window
+this window shows the date that the commit is made
+
+lower left window
+this window shows the change log of a commit
+
+lower right window
+this window shows the files that is influenced by the commit
